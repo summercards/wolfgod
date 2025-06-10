@@ -132,9 +132,7 @@ button {
   box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.35);
   transition: all 0.25s ease;
 }
-button::after {
-  border: none;
-}
+button::after { border: none; }
 button:active {
   transform: translateY(2rpx);
   box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.4);
@@ -163,12 +161,8 @@ button:active {
   background: #262626;
   border-radius: 50%;
 }
-.player::before {
-  top: -11rpx; left: 50%; transform: translateX(-50%);
-}
-.player::after {
-  bottom: -11rpx; left: 50%; transform: translateX(-50%);
-}
+.player::before { top: -11rpx; left: 50%; transform: translateX(-50%); }
+.player::after { bottom: -11rpx; left: 50%; transform: translateX(-50%); }
 
 /* 死亡卡片走灰色票券风格 */
 .player.dead {
@@ -188,6 +182,22 @@ button:active {
   color: rgba(214, 74, 62, 0.15);
 }
 
+/* 角色专属颜色（需放在 .player 通用样式之后，提高 specificity，让颜色恢复生效） */
+.player.werewolf      { background: #9B59B6; color: #F0E9D2; }
+.player.seer          { background: #2980B9; color: #F0E9D2; }
+.player.witch, .witch {
+  background: #f33886;
+  color: #F0E9D2;
+}
+.player.bodyguard, .player.guard, .guard, .bodyguard {
+  background: #F6C667;
+  color: #1F1F1F;
+}
+.player.hunter, .hunter {
+  background: #16A085;
+  color: #F0E9D2;
+}
+
 /* 标签 */
 .verify-tag {
   background: #D64A3E;
@@ -197,9 +207,7 @@ button:active {
   font-weight: 700;
   box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
 }
-.ability-tag {
-  color: #D64A3E;
-}
+.ability-tag { color: #D64A3E; }
 
 /* 日志框复古票根感 */
 .log {
@@ -211,10 +219,7 @@ button:active {
   max-height: 400rpx;
   color: #F0E9D2;
 }
-.log view {
-  line-height: 1.6;
-  font-size: 24rpx;
-}
+.log view { line-height: 1.6; font-size: 24rpx; }
 
 /* 底部流程 & 跳过按钮*/
 .flow-control button,
@@ -222,3 +227,5 @@ button:active {
   width: 70%;
   margin: 0 auto;
 }
+
+/* === End Retro Theme Overrides === */
