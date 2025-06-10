@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="players">
+    <block wx:for="{{players}}" wx:key="index">
+      <view class="player {{item.alive ? '' : 'dead'}}" bindtap="onSelectPlayer" data-index="{{index}}">
+        {{item.number}}
+      </view>
+    </block>
+  </view>
+
+  <view class="controls">
+    <button bindtap="startGame">开始游戏</button>
+    <button bindtap="enterNight">进入夜晚</button>
+    <button bindtap="enterDay">进入白天</button>
+    <button bindtap="vote">投票</button>
+    <button bindtap="killPlayer">淘汰玩家</button>
+  </view>
+
+  <scroll-view class="log" scroll-y="true">
+    <block wx:for="{{logs}}" wx:key="index">
+      <view>{{item}}</view>
+    </block>
+  </scroll-view>
+</view>
