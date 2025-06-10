@@ -1,7 +1,7 @@
 <view class="container">
   <view class="players">
     <block wx:for="{{players}}" wx:key="index">
-      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}} {{item.role === '女巫' ? 'witch' : ''}}"
+      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}} {{item.role === '女巫' ? 'witch' : ''}} {{item.role === '守卫' && phase === 'guard_protect' ? 'guardian-mark' : ''}}"
             bindtap="onSelectPlayer" data-index="{{index}}">
         <view class="verify-tag" wx:if="{{item.verifyResult}}">{{item.verifyResult}}</view>
         <view class="ability-tag" wx:if="{{item.role === '女巫'}}">
