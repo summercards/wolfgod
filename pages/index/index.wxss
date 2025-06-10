@@ -40,3 +40,12 @@
 .flow-control {
   margin-top: 30rpx;
 }
+.verify-tag {
+  position: absolute;
+  font-size: 20rpx;
+  color: #fff;
+  background: #444;
+  padding: 2rpx 4rpx;
+  border-radius: 4rpx;
+  transform: translate(-30rpx, -40rpx);
+}
