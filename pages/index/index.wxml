@@ -1,42 +1,44 @@
 <view class="container">
-  <view class="players">
-    <block wx:for="{{players}}" wx:key="index">
-      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}} {{item.role === '女巫' ? 'witch' : ''}} {{item.role === '守卫' ? 'guard' : ''}} {{item.role === '猎人' ? 'hunter' : ''}} {{item.guarded ? 'guarded' : ''}} {{item.role === '守卫' && phase === 'guard_protect' ? 'guardian-mark' : ''}} {{item.cured ? 'cured' : ''}}"
-            bindtap="onSelectPlayer" data-index="{{index}}">
 
-        <view class="verify-tag" wx:if="{{item.verifyResult}}">{{item.verifyResult}}</view>
-        <view class="ability-tag" wx:if="{{item.role === '女巫'}}">
-          <text>解药</text> <text>毒药</text>
-        </view>
+<!-- 👆 控制按钮提前放置 -->
+<view class="controls">
+  <button bindtap="startGame">开始游戏</button>
+  <button bindtap="enterNight">进入夜晚</button>
+</view>
 
-        <block wx:if="{{item.role}}">
-          <text>{{item.number}}-{{item.role}}</text>
-        </block>
-        <block wx:else>
-          <text>{{item.number}}</text>
-        </block>
+<view class="players">
+  <block wx:for="{{players}}" wx:key="index">
+    <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}} {{item.role === '女巫' ? 'witch' : ''}} {{item.role === '守卫' ? 'guard' : ''}} {{item.role === '猎人' ? 'hunter' : ''}} {{item.guarded ? 'guarded' : ''}} {{item.role === '守卫' && phase === 'guard_protect' ? 'guardian-mark' : ''}} {{item.cured ? 'cured' : ''}}"
+          bindtap="onSelectPlayer" data-index="{{index}}">
+
+      <view class="verify-tag" wx:if="{{item.verifyResult}}">{{item.verifyResult}}</view>
+      <view class="ability-tag" wx:if="{{item.role === '女巫'}}">
+        <text>解药</text> <text>毒药</text>
       </view>
-    </block>
-  </view>
 
-  <view class="controls">
-    <button bindtap="startGame">开始游戏</button>
-    <button bindtap="enterNight">进入夜晚</button>
-  </view>
+      <block wx:if="{{item.role}}">
+        <text>{{item.number}}-{{item.role}}</text>
+      </block>
+      <block wx:else>
+        <text>{{item.number}}</text>
+      </block>
+    </view>
+  </block>
+</view>
 
-  <!-- ✅ 日志自动滚动到底部 -->
-  <scroll-view class="log" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{logAnchor}}">
-    <block wx:for="{{logs}}" wx:key="index">
-      <view>{{item}}</view>
-    </block>
-    <view id="log-bottom"></view>
-  </scroll-view>
+<!-- 日志框下移 -->
+<scroll-view class="log" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{logAnchor}}">
+  <block wx:for="{{logs}}" wx:key="index">
+    <view>{{item}}</view>
+  </block>
+  <view id="log-bottom"></view>
+</scroll-view>
 
-  <view wx:if="{{subPhase === 'witch_cure'}}" class="skip-cure">
-    <button bindtap="skipCure">跳过使用解药</button>
-  </view>
+<view wx:if="{{subPhase === 'witch_cure'}}" class="skip-cure">
+  <button bindtap="skipCure">跳过使用解药</button>
+</view>
 
-  <view class="flow-control" wx:if="{{subPhase !== 'witch_cure'}}">
-    <button bindtap="handleFlowAction">{{flowButtonText}}</button>
-  </view>
+<view class="flow-control" wx:if="{{subPhase !== 'witch_cure'}}">
+  <button bindtap="handleFlowAction">{{flowButtonText}}</button>
+</view>
 </view>

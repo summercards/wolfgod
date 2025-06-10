@@ -102,15 +102,15 @@ Page({
 
   handleFlowAction() {
     const nextMap = {
-      none: { phase: 'night', subPhase: 'wolf_mark', text: '狼人请睁眼' },
+      none: { phase: 'night', subPhase: 'wolf_mark', text: '狼人睁眼，标记狼人-进入狼人指定目标环节' },
       wolf_mark: { subPhase: 'wolf_kill', text: '狼人请杀人' },
-      wolf_kill: { subPhase: 'seer_mark', text: '狼人请闭眼，预言家请睁眼' },
-      seer_mark: { subPhase: 'seer_verify', text: '预言家请验人' },
-      seer_verify: { subPhase: 'witch_mark', text: '预言家请闭眼，女巫请睁眼' },
-      witch_mark: { subPhase: 'witch_cure', text: '女巫是否使用解药？' },
-      witch_cure: { subPhase: 'witch_poison', text: '女巫是否使用毒药？' },
-      witch_poison: { subPhase: 'guard_mark', text: '女巫请闭眼，守卫请睁眼' },
-      guard_mark: { subPhase: 'guard_protect', text: '守卫请守护目标' },
+      wolf_kill: { subPhase: 'seer_mark', text: '狼人请闭眼，预言家请睁眼（标记预言家）' },
+      seer_mark: { subPhase: 'seer_verify', text: '预言家请验人-（标记验的人）' },
+      seer_verify: { subPhase: 'witch_mark', text: '预言家请闭眼，女巫请睁眼（标记女巫）' },
+      witch_mark: { subPhase: 'witch_cure', text: '女巫是否使用解药？（点击被杀的玩家使用解药，点击按钮放弃使用）' },
+      witch_cure: { subPhase: 'witch_poison', text: '女巫是否使用毒药？（点击玩家使用毒药，点击按钮放弃使用）' },
+      witch_poison: { subPhase: 'guard_mark', text: '女巫请闭眼，守卫请睁眼（标记守卫）' },
+      guard_mark: { subPhase: 'guard_protect', text: '守卫请守护目标（标记要守卫的目标）' },
       guard_protect: { subPhase: 'hunter_mark', text: '守卫请闭眼，猎人请睁眼' },
       hunter_mark: { phase: 'day', subPhase: 'day_result', text: '天亮了，开始结算' },
       day_result: { subPhase: 'police', text: '需要上警的玩家请举手' },

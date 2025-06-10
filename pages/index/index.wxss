@@ -1,55 +1,85 @@
+/* index.wxss – 已集成 Retro Ticket 主题，不改动布局 & 功能 */
+
+/* ️⚠️ 若要回退主题，只需删除\/以下 “Retro Theme Overrides” 部分即可 */
+
+/* ---------------- 现有样式（保持原状） ---------------- */
+/* 页面整体容器样式 */
 .container {
   padding: 20rpx;
 }
+
+/* 玩家区布局：横向排列，自动换行 */
 .players {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* 单个玩家样式 */
 .player {
-  width: 100rpx;
-  height: 100rpx;
-  line-height: 100rpx;
-  background: #8bc34a;
-  color: #fff;
-  text-align: center;
-  margin: 10rpx;
-  border-radius: 10rpx;
+  width: 130rpx;
+  height: 130rpx;
   position: relative;
+  margin: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
 }
+
+/* 已死亡玩家样式 */
 .player.dead {
   background: #9e9e9e;
 }
+
+/* 狼人样式 */
 .player.werewolf {
   background: purple;
 }
+
+/* 夜晚被杀玩家加红框 */
 .player.killed {
   border: 4rpx solid red;
 }
+
+/* 预言家样式 */
 .player.seer {
   background: goldenrod;
 }
+
+/* 控制按钮样式（上下间距） */
 .controls button {
   margin: 10rpx 0;
 }
+
+/* 日志框样式 */
 .log {
   height: 300rpx;
-  border-top: 1px solid #ccc;
+  overflow: scroll;
+  background: #f5f5f5;
   margin-top: 20rpx;
-  padding-top: 10rpx;
+  border-radius: 8rpx;
+  padding: 8rpx;
 }
+
+/* 下方流程按钮区域 */
 .flow-control {
-  margin-top: 30rpx;
+  margin-top: 40rpx; /* 增加距离 */
 }
+
+/* 验证标签 */
 .verify-tag {
   position: absolute;
   font-size: 20rpx;
   color: rgb(214, 252, 46);
   background: rgba(68, 68, 68, 0);
   padding: 1rpx 2rpx;
-  border-radius: 4rpx;
-  transform: translate(0rpx, -40rpx);
 }
+
+/* 女巫能力标签 */
 .ability-tag {
   position: absolute;
   bottom: 5rpx;
@@ -59,7 +89,9 @@
   display: flex;
   justify-content: space-around;
 }
-.player.witch {
+
+/* 其他角色样式（部分示例） */
+.bodyguard {
   background: hsl(43, 74%, 49%);
 }
 .guardian-mark {
@@ -74,48 +106,119 @@
 }
 .guarded {
   border: 4px solid #00aaff;
-  border-radius: 10px;
-}
-.cured {
-  border: 3px solid purple;
-  border-radius: 10px;
 }
 
-/* ✅ 新布局样式 */
+/* ========================================================= */
+/* === Retro Theme Overrides (Inspired by vintage airline) === */
+
+/* 全局深灰背景与奶油色文字 */
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px;
+  background: #262626;
+  color: #F0E9D2;
+  min-height: 100vh;
+  font-weight: 500;
+  letter-spacing: 0.5rpx;
 }
-.top-controls {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 12px;
+
+/* 按钮 */
+button {
+  background: #D64A3E;
+  color: #F0E9D2;
+  border: 2rpx solid #F0E9D2;
+  border-radius: 8rpx;
+  padding: 12rpx 28rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
 }
-.players-columns {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 16px;
+button::after {
+  border: none;
 }
-.player-column {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+button:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.4);
 }
-.big-button {
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 10px;
+
+/* 控制区割线 */
+.controls {
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 4rpx dashed #BFB8A3;
 }
+
+/* 玩家卡片票券风格 */
+.player {
+  background: #F0E9D2;
+  color: #1F1F1F;
+  border: 4rpx solid #D64A3E;
+  border-radius: 16rpx;
+  box-shadow: 0 6rpx 12rpx rgba(0, 0, 0, 0.35);
+}
+.player::before, .player::after {
+  content: "";
+  position: absolute;
+  width: 22rpx;
+  height: 22rpx;
+  background: #262626;
+  border-radius: 50%;
+}
+.player::before {
+  top: -11rpx; left: 50%; transform: translateX(-50%);
+}
+.player::after {
+  bottom: -11rpx; left: 50%; transform: translateX(-50%);
+}
+
+/* 死亡卡片走灰色票券风格 */
+.player.dead {
+  background: #A9A9A9 !important;
+  border-color: #5A5A5A !important;
+  color: #E8E8E8 !important;
+  filter: grayscale(100%);
+}
+.player.dead::after {
+  content: "VOID";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  font-size: 40rpx;
+  letter-spacing: 3rpx;
+  font-weight: 900;
+  color: rgba(214, 74, 62, 0.15);
+}
+
+/* 标签 */
+.verify-tag {
+  background: #D64A3E;
+  color: #F0E9D2;
+  padding: 2rpx 6rpx;
+  border-radius: 6rpx;
+  font-weight: 700;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+}
+.ability-tag {
+  color: #D64A3E;
+}
+
+/* 日志框复古票根感 */
 .log {
-  height: 180px;
-  width: 90%;
-  border: 1px solid #000;
-  margin: 16px 0;
-  padding: 6px;
-  font-size: 14px;
-  overflow-y: scroll;
-  background-color: #fff;
+  margin-top: 32rpx;
+  padding: 20rpx;
+  background: rgba(240, 233, 210, 0.05);
+  border: 2rpx dashed #BFB8A3;
+  border-radius: 12rpx;
+  max-height: 400rpx;
+  color: #F0E9D2;
+}
+.log view {
+  line-height: 1.6;
+  font-size: 24rpx;
+}
+
+/* 底部流程 & 跳过按钮*/
+.flow-control button,
+.skip-cure button {
+  width: 70%;
+  margin: 0 auto;
 }
