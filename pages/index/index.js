@@ -13,9 +13,7 @@ Page({
   },
 
   addLog(message) {
-    this.setData({
-      logs: [...this.data.logs, message]
-    });
+    this.setData({ logs: [...this.data.logs, message] });
   },
 
   onSelectPlayer(e) {
@@ -30,10 +28,6 @@ Page({
       players.forEach(p => p.killedTonight = false);
       players[index].killedTonight = true;
       this.addLog(`狼人选择淘汰 玩家 ${players[index].number}`);
-      this.setData({
-        phase: 'seer_pick',
-        flowButtonText: '预言家验人'
-      });
     } else if (phase === 'seer_pick') {
       players.forEach(p => {
         if (p.role === '预言家') p.role = '';
@@ -43,20 +37,65 @@ Page({
     } else if (phase === 'seer_verify') {
       players.forEach(p => p.verifyResult = '');
       const target = players[index];
-      if (target.role === '狼人') {
-        target.verifyResult = '验狼人';
-        this.addLog(`预言家查验 玩家 ${target.number} 是狼人`);
-      } else {
-        target.verifyResult = '验好人';
-        this.addLog(`预言家查验 玩家 ${target.number} 是好人`);
-      }
-      this.setData({
-        phase: 'witch_phase',
-        flowButtonText: '女巫环节'
+      target.verifyResult = (target.role === '狼人') ? '验狼人' : '验好人';
+      this.addLog(`预言家查验 玩家 ${target.number} 是 ${target.verifyResult}`);
+    } else if (phase === 'witch_pick') {
+      players.forEach(p => {
+        if (p.role === '女巫') p.role = '';
       });
+      players[index].role = '女巫';
+      this.addLog(`标记 玩家 ${players[index].number} 为女巫`);
     }
 
     this.setData({ players });
+  },
+
+  handleFlowAction() {
+    let newPhase = '';
+    let newText = '';
+    let log = '';
+
+    switch (this.data.phase) {
+      case 'none':
+      case 'night':
+      case 'day':
+        newPhase = 'wolf_kill';
+        newText = '标记预言家';
+        log = '进入狼人淘汰环节，请狼人选择淘汰目标';
+        break;
+      case 'wolf_kill':
+        newPhase = 'seer_pick';
+        newText = '预言家验人';
+        log = '请点击玩家，标记谁是预言家';
+        break;
+      case 'seer_pick':
+        newPhase = 'seer_verify';
+        newText = '标记女巫';
+        log = '进入预言家验人环节，请点击要查验的玩家';
+        break;
+      case 'seer_verify':
+        newPhase = 'witch_pick';
+        newText = '使用解药环节';
+        log = '请点击玩家，标记谁是女巫';
+        break;
+      case 'witch_pick':
+        newPhase = 'witch_cure';
+        newText = '使用毒药环节';
+        log = '进入解药使用环节（可复活被淘汰玩家）';
+        break;
+      case 'witch_cure':
+        newPhase = 'witch_poison';
+        newText = '进入白天';
+        log = '进入毒药使用环节，可毒死一名玩家';
+        break;
+      default:
+        newPhase = 'day';
+        newText = '开始投票';
+        log = '进入白天环节';
+    }
+
+    this.setData({ phase: newPhase, flowButtonText: newText });
+    this.addLog(log);
   },
 
   startGame() {
@@ -97,24 +136,6 @@ Page({
       players[index].alive = false;
       this.setData({ players });
       this.addLog(`玩家 ${players[index].number} 被淘汰`);
-    }
-  },
-
-  handleFlowAction() {
-    const phase = this.data.phase;
-
-    if (phase === 'none' || phase === 'night' || phase === 'day') {
-      this.setData({
-        phase: 'wolf_kill',
-        flowButtonText: '狼人选择淘汰目标中...'
-      });
-      this.addLog('进入狼人淘汰环节，请狼人点击玩家淘汰');
-    } else if (phase === 'seer_pick') {
-      this.setData({
-        phase: 'seer_verify',
-        flowButtonText: '女巫环节'
-      });
-      this.addLog('进入预言家验人环节，请点击要查验的玩家');
     }
   }
 });
