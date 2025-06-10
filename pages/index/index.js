@@ -7,7 +7,8 @@ Page({
       role: '',
       killedTonight: false,
       verifyResult: '',
-      guarded: false
+      guarded: false,
+      cured: false
     })),
     logs: [],
     phase: 'none',
@@ -16,7 +17,10 @@ Page({
   },
 
   addLog(message) {
-    this.setData({ logs: [...this.data.logs, message] });
+    this.setData({
+      logs: [...this.data.logs, message],
+      logAnchor: 'log-bottom' // 自动滚动到日志底部
+    });
   },
 
   onSelectPlayer(e) {
@@ -45,7 +49,20 @@ Page({
         players.forEach(p => { if (p.role === '女巫') p.role = ''; });
         players[index].role = '女巫';
         this.addLog(`标记 玩家 ${players[index].number} 为女巫`);
-      } else if (subPhase === 'witch_poison') {
+      
+  } else if (subPhase === 'witch_cure') {
+    const target = players[index];
+    if (target.killedTonight) {
+      target.alive = true;
+      target.killedTonight = false;
+      target.cured = true;
+      this.addLog(`女巫使用解药，救回了 玩家 ${target.number}`);
+      this.setData({ players });
+    } else {
+      this.addLog(`只能对被杀玩家使用解药！`);
+    }
+
+    } else if (subPhase === 'witch_poison') {
         if (players[index].alive) {
           players[index].alive = false;
           this.addLog(`女巫使用毒药，毒死了 玩家 ${players[index].number}`);
@@ -68,6 +85,15 @@ Page({
     }
 
     this.setData({ players });
+  },
+
+  
+  skipCure() {
+    this.addLog('女巫放弃使用解药');
+    this.setData({
+      subPhase: 'witch_poison',
+      flowButtonText: '女巫是否使用毒药？'
+    });
   },
 
   handleFlowAction() {
@@ -108,7 +134,8 @@ Page({
         role: '',
         killedTonight: false,
         verifyResult: '',
-        guarded: false
+        guarded: false,
+      cured: false
       })),
       logs: [],
       phase: 'none',

@@ -59,10 +59,27 @@
   justify-content: space-around;
 }
 .player.witch {
-  background: goldenrod;
+  background: hsl(43, 74%, 49%);
 }
 
 .guardian-mark {
   border: 4px solid blue;
+  border-radius: 10px;
+}
+
+.guard {
+  background-color: hsl(43, 74%, 49%);
+}
+
+.hunter {
+  background-color: hsl(43, 74%, 49%);
+}
+
+.guarded {
+  border: 4px solid #00aaff;
+  border-radius: 10px;
+}
+.cured {
+  border: 3px solid purple;
   border-radius: 10px;
 }
