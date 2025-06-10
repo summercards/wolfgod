@@ -22,9 +22,6 @@
   <view class="controls">
     <button bindtap="startGame">开始游戏</button>
     <button bindtap="enterNight">进入夜晚</button>
-    <button bindtap="enterDay">进入白天</button>
-    <button bindtap="vote">投票</button>
-    <button bindtap="killPlayer">淘汰玩家</button>
   </view>
 
   <!-- ✅ 日志自动滚动到底部 -->

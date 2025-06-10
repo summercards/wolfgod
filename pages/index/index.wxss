@@ -43,11 +43,11 @@
 .verify-tag {
   position: absolute;
   font-size: 20rpx;
-  color: #fff;
-  background: #444;
-  padding: 2rpx 4rpx;
+  color: rgb(214, 252, 46);
+  background: rgba(68, 68, 68, 0);
+  padding: 1rpx 2rpx;
   border-radius: 4rpx;
-  transform: translate(-30rpx, -40rpx);
+  transform: translate(0rpx, -40rpx);
 }
 .ability-tag {
   position: absolute;

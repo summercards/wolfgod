@@ -1,4 +1,3 @@
-
 Page({
   data: {
     players: Array.from({ length: 12 }, (_, i) => ({
@@ -8,18 +7,21 @@ Page({
       killedTonight: false,
       verifyResult: '',
       guarded: false,
-      cured: false
+      cured: false,
+      isPolice: false,
+      isPoliceLeader: false
     })),
     logs: [],
     phase: 'none',
     subPhase: '',
-    flowButtonText: '开始游戏'
+    flowButtonText: '开始游戏',
+    logAnchor: ''
   },
 
   addLog(message) {
     this.setData({
       logs: [...this.data.logs, message],
-      logAnchor: 'log-bottom' // 自动滚动到日志底部
+      logAnchor: 'log-bottom'
     });
   },
 
@@ -49,20 +51,17 @@ Page({
         players.forEach(p => { if (p.role === '女巫') p.role = ''; });
         players[index].role = '女巫';
         this.addLog(`标记 玩家 ${players[index].number} 为女巫`);
-      
-  } else if (subPhase === 'witch_cure') {
-    const target = players[index];
-    if (target.killedTonight) {
-      target.alive = true;
-      target.killedTonight = false;
-      target.cured = true;
-      this.addLog(`女巫使用解药，救回了 玩家 ${target.number}`);
-      this.setData({ players });
-    } else {
-      this.addLog(`只能对被杀玩家使用解药！`);
-    }
-
-    } else if (subPhase === 'witch_poison') {
+      } else if (subPhase === 'witch_cure') {
+        const target = players[index];
+        if (target.killedTonight) {
+          target.alive = true;
+          target.killedTonight = false;
+          target.cured = true;
+          this.addLog(`女巫使用解药，救回了 玩家 ${target.number}`);
+        } else {
+          this.addLog(`只能对被杀玩家使用解药！`);
+        }
+      } else if (subPhase === 'witch_poison') {
         if (players[index].alive) {
           players[index].alive = false;
           this.addLog(`女巫使用毒药，毒死了 玩家 ${players[index].number}`);
@@ -82,18 +81,23 @@ Page({
         players[index].role = '猎人';
         this.addLog(`标记 玩家 ${players[index].number} 为猎人`);
       }
+    } else if (phase === 'day') {
+      if (subPhase === 'police') {
+        players[index].isPolice = !players[index].isPolice;
+        this.addLog(`玩家 ${players[index].number} ${players[index].isPolice ? '上警' : '取消上警'}`);
+      } else if (subPhase === 'police_confirm') {
+        players.forEach(p => p.isPoliceLeader = false);
+        players[index].isPoliceLeader = true;
+        this.addLog(`玩家 ${players[index].number} 成为警长`);
+      } else if (subPhase === 'vote') {
+        if (players[index].alive) {
+          players[index].alive = false;
+          this.addLog(`玩家 ${players[index].number} 被投票淘汰`);
+        }
+      }
     }
 
     this.setData({ players });
-  },
-
-  
-  skipCure() {
-    this.addLog('女巫放弃使用解药');
-    this.setData({
-      subPhase: 'witch_poison',
-      flowButtonText: '女巫是否使用毒药？'
-    });
   },
 
   handleFlowAction() {
@@ -108,7 +112,12 @@ Page({
       witch_poison: { subPhase: 'guard_mark', text: '女巫请闭眼，守卫请睁眼' },
       guard_mark: { subPhase: 'guard_protect', text: '守卫请守护目标' },
       guard_protect: { subPhase: 'hunter_mark', text: '守卫请闭眼，猎人请睁眼' },
-      hunter_mark: { phase: 'day', subPhase: '', text: '猎人请闭眼，天亮了' }
+      hunter_mark: { phase: 'day', subPhase: 'day_result', text: '天亮了，开始结算' },
+      day_result: { subPhase: 'police', text: '需要上警的玩家请举手' },
+      police: { subPhase: 'police_confirm', text: '竞选警徽，请指定警长' },
+      police_confirm: { subPhase: 'speak', text: '进入发言环节' },
+      speak: { subPhase: 'vote', text: '进入投票环节' },
+      vote: { phase: 'night', subPhase: 'wolf_mark', text: '天黑请闭眼，狼人请睁眼' }
     };
 
     const current = this.data.phase === 'none' ? 'none' : this.data.subPhase;
@@ -126,6 +135,14 @@ Page({
     this.addLog(`进入环节：${next.text}`);
   },
 
+  skipCure() {
+    this.addLog('女巫放弃使用解药');
+    this.setData({
+      subPhase: 'witch_poison',
+      flowButtonText: '女巫是否使用毒药？'
+    });
+  },
+
   startGame() {
     this.setData({
       players: Array.from({ length: 12 }, (_, i) => ({
@@ -135,12 +152,15 @@ Page({
         killedTonight: false,
         verifyResult: '',
         guarded: false,
-      cured: false
+        cured: false,
+        isPolice: false,
+        isPoliceLeader: false
       })),
       logs: [],
       phase: 'none',
       subPhase: '',
-      flowButtonText: '开始游戏'
+      flowButtonText: '开始游戏',
+      logAnchor: ''
     });
     this.addLog('游戏开始');
   },
@@ -151,22 +171,7 @@ Page({
   },
 
   enterDay() {
-    this.setData({ phase: 'day', subPhase: '', flowButtonText: '开始投票' });
+    this.setData({ phase: 'day', subPhase: 'day_result', flowButtonText: '天亮了，开始结算' });
     this.addLog('进入白天环节');
-  },
-
-  vote() {
-    this.addLog('开始投票环节');
-  },
-
-  killPlayer() {
-    const alivePlayers = this.data.players.filter(p => p.alive);
-    if (alivePlayers.length > 0) {
-      const index = this.data.players.findIndex(p => p.alive);
-      const players = [...this.data.players];
-      players[index].alive = false;
-      this.setData({ players });
-      this.addLog(`玩家 ${players[index].number} 被淘汰`);
-    }
   }
 });
