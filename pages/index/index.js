@@ -1,7 +1,8 @@
 Page({
   data: {
-    players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true })),
-    logs: []
+    players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '' })),
+    logs: [],
+    phase: 'none'
   },
 
   addLog(message) {
@@ -12,20 +13,40 @@ Page({
 
   onSelectPlayer(e) {
     const index = e.currentTarget.dataset.index;
-    const player = this.data.players[index];
-    this.addLog(`选择了玩家 ${player.number}`);
+    const players = [...this.data.players];
+    const phase = this.data.phase;
+
+    if (phase === 'night') {
+      if (players[index].role === '狼人') {
+        players[index].role = '';
+        this.addLog(`取消标记 玩家 ${players[index].number} 为狼人`);
+      } else {
+        players[index].role = '狼人';
+        this.addLog(`标记 玩家 ${players[index].number} 为狼人`);
+      }
+      this.setData({ players });
+    } else {
+      this.addLog(`选择了玩家 ${players[index].number}`);
+    }
   },
 
   startGame() {
+    this.setData({
+      players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '' })),
+      logs: [],
+      phase: 'none'
+    });
     this.addLog('游戏开始');
   },
 
   enterNight() {
-    this.addLog('进入夜晚');
+    this.setData({ phase: 'night' });
+    this.addLog('进入夜晚环节，点击玩家标记身份（如狼人）');
   },
 
   enterDay() {
-    this.addLog('进入白天');
+    this.setData({ phase: 'day' });
+    this.addLog('进入白天环节');
   },
 
   vote() {
@@ -41,5 +62,10 @@ Page({
       this.setData({ players });
       this.addLog(`玩家 ${players[index].number} 被淘汰`);
     }
+  },
+
+  enterWolfKillPhase() {
+    this.setData({ phase: 'wolf_kill' });
+    this.addLog('进入狼人淘汰环节，请狼人选择要淘汰的玩家');
   }
 });
