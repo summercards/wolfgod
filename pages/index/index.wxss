@@ -25,6 +25,9 @@
 .player.killed {
   border: 4rpx solid red;
 }
+.player.seer {
+  background: goldenrod;
+}
 .controls button {
   margin: 10rpx 0;
 }

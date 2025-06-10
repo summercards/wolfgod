@@ -25,17 +25,23 @@ Page({
         players[index].role = '狼人';
         this.addLog(`标记 玩家 ${players[index].number} 为狼人`);
       }
-      this.setData({ players });
     } else if (phase === 'wolf_kill') {
-      players.forEach(p => p.killedTonight = false); // 清除旧标记
+      players.forEach(p => p.killedTonight = false);
       players[index].killedTonight = true;
-      this.setData({ players });
       this.addLog(`狼人选择淘汰 玩家 ${players[index].number}`);
       this.setData({
-        phase: 'seer_check',
-        flowButtonText: '进入预言家验人环节'
+        phase: 'seer_pick',
+        flowButtonText: '预言家验人'
       });
+    } else if (phase === 'seer_pick') {
+      players.forEach(p => {
+        if (p.role === '预言家') p.role = '';
+      });
+      players[index].role = '预言家';
+      this.addLog(`标记 玩家 ${players[index].number} 为预言家`);
     }
+
+    this.setData({ players });
   },
 
   startGame() {
@@ -82,9 +88,12 @@ Page({
         flowButtonText: '狼人选择淘汰目标中...'
       });
       this.addLog('进入狼人淘汰环节，请狼人点击玩家淘汰');
-    } else if (phase === 'seer_check') {
-      this.addLog('进入预言家验人环节，请选择要查验的玩家（待实现）');
-      // 可继续扩展
+    } else if (phase === 'seer_check' || phase === 'wolf_kill') {
+      this.setData({
+        phase: 'seer_pick',
+        flowButtonText: '预言家验人'
+      });
+      this.addLog('请点击玩家，标记谁是预言家');
     }
   }
 });

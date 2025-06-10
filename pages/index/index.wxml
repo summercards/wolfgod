@@ -1,9 +1,9 @@
 <view class="container">
   <view class="players">
     <block wx:for="{{players}}" wx:key="index">
-      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}}"
+      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}}"
             bindtap="onSelectPlayer" data-index="{{index}}">
-        {{item.role === '狼人' ? item.number + '-狼人' : item.number}}
+        {{item.role ? item.number + '-' + item.role : item.number}}
       </view>
     </block>
   </view>
