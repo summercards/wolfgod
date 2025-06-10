@@ -1,8 +1,9 @@
 Page({
   data: {
-    players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '' })),
+    players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '', killedTonight: false })),
     logs: [],
-    phase: 'none'
+    phase: 'none',
+    flowButtonText: '进入狼人淘汰环节'
   },
 
   addLog(message) {
@@ -25,16 +26,24 @@ Page({
         this.addLog(`标记 玩家 ${players[index].number} 为狼人`);
       }
       this.setData({ players });
-    } else {
-      this.addLog(`选择了玩家 ${players[index].number}`);
+    } else if (phase === 'wolf_kill') {
+      players.forEach(p => p.killedTonight = false); // 清除旧标记
+      players[index].killedTonight = true;
+      this.setData({ players });
+      this.addLog(`狼人选择淘汰 玩家 ${players[index].number}`);
+      this.setData({
+        phase: 'seer_check',
+        flowButtonText: '进入预言家验人环节'
+      });
     }
   },
 
   startGame() {
     this.setData({
-      players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '' })),
+      players: Array.from({ length: 12 }, (_, i) => ({ number: i + 1, alive: true, role: '', killedTonight: false })),
       logs: [],
-      phase: 'none'
+      phase: 'none',
+      flowButtonText: '进入狼人淘汰环节'
     });
     this.addLog('游戏开始');
   },
@@ -64,8 +73,18 @@ Page({
     }
   },
 
-  enterWolfKillPhase() {
-    this.setData({ phase: 'wolf_kill' });
-    this.addLog('进入狼人淘汰环节，请狼人选择要淘汰的玩家');
+  handleFlowAction() {
+    const phase = this.data.phase;
+
+    if (phase === 'none' || phase === 'night' || phase === 'day') {
+      this.setData({
+        phase: 'wolf_kill',
+        flowButtonText: '狼人选择淘汰目标中...'
+      });
+      this.addLog('进入狼人淘汰环节，请狼人点击玩家淘汰');
+    } else if (phase === 'seer_check') {
+      this.addLog('进入预言家验人环节，请选择要查验的玩家（待实现）');
+      // 可继续扩展
+    }
   }
 });

@@ -22,6 +22,9 @@
 .player.werewolf {
   background: purple;
 }
+.player.killed {
+  border: 4rpx solid red;
+}
 .controls button {
   margin: 10rpx 0;
 }
@@ -30,4 +33,7 @@
   border-top: 1px solid #ccc;
   margin-top: 20rpx;
   padding-top: 10rpx;
+}
+.flow-control {
+  margin-top: 30rpx;
 }

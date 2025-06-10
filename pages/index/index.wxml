@@ -1,7 +1,7 @@
 <view class="container">
   <view class="players">
     <block wx:for="{{players}}" wx:key="index">
-      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}}"
+      <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}}"
             bindtap="onSelectPlayer" data-index="{{index}}">
         {{item.role === '狼人' ? item.number + '-狼人' : item.number}}
       </view>
@@ -14,7 +14,6 @@
     <button bindtap="enterDay">进入白天</button>
     <button bindtap="vote">投票</button>
     <button bindtap="killPlayer">淘汰玩家</button>
-    <button bindtap="enterWolfKillPhase">进入狼人淘汰环节</button>
   </view>
 
   <scroll-view class="log" scroll-y="true">
@@ -22,4 +21,8 @@
       <view>{{item}}</view>
     </block>
   </scroll-view>
+
+  <view class="flow-control">
+    <button bindtap="handleFlowAction">{{flowButtonText}}</button>
+  </view>
 </view>
