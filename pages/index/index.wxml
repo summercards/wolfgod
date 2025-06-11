@@ -6,6 +6,14 @@
   <button bindtap="enterNight">进入夜晚</button>
 </view>
 
+<!-- ✅ 玩家统计信息展示 -->
+<view class="role-stats">
+  <text>当前存活 | 狼人: {{roleStats['狼人']}}  村民: {{roleStats['村民']}}  神民: {{roleStats['神民']}}</text>
+
+</view>
+
+
+<!-- 👥 玩家区 -->
 <view class="players">
   <block wx:for="{{players}}" wx:key="index">
     <view class="player {{item.alive ? '' : 'dead'}} {{item.role === '狼人' ? 'werewolf' : ''}} {{item.killedTonight ? 'killed' : ''}} {{item.role === '预言家' ? 'seer' : ''}} {{item.role === '女巫' ? 'witch' : ''}} {{item.role === '守卫' ? 'guard' : ''}} {{item.role === '猎人' ? 'hunter' : ''}} {{item.guarded ? 'guarded' : ''}} {{item.role === '守卫' && phase === 'guard_protect' ? 'guardian-mark' : ''}} {{item.cured ? 'cured' : ''}}"
@@ -26,7 +34,7 @@
   </block>
 </view>
 
-<!-- 日志框下移 -->
+<!-- 📜 日志记录 -->
 <scroll-view class="log" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{logAnchor}}">
   <block wx:for="{{logs}}" wx:key="index">
     <view>{{item}}</view>
@@ -34,11 +42,14 @@
   <view id="log-bottom"></view>
 </scroll-view>
 
+<!-- ⏭️ 女巫跳过 -->
 <view wx:if="{{subPhase === 'witch_cure'}}" class="skip-cure">
   <button bindtap="skipCure">跳过使用解药</button>
 </view>
 
+<!-- 🔁 控制流程 -->
 <view class="flow-control" wx:if="{{subPhase !== 'witch_cure'}}">
   <button bindtap="handleFlowAction">{{flowButtonText}}</button>
 </view>
+
 </view>

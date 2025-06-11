@@ -16,7 +16,8 @@ Page({
     subPhase: '',
     flowButtonText: '开始游戏',
     dayCount: 1,
-    logAnchor: ''
+    logAnchor: '',
+    roleStats: { 狼人: 0, 村民: 0, 神民: 0 }
   },
 
   addLog(message) {
@@ -25,6 +26,34 @@ Page({
       logAnchor: 'log-bottom'
     });
   },
+
+  updateRoleStats() {
+    const players = this.data.players;
+    let wolf = 0;
+    let villager = 0;
+    let god = 0;
+  
+    players.forEach(p => {
+      if (!p.alive) return;
+  
+      if (p.role === '狼人') {
+        wolf++;
+      } else if (['预言家', '女巫', '守卫', '猎人'].includes(p.role)) {
+        god++;
+      } else {
+        villager++; // 未标记角色或默认角色视为村民
+      }
+    });
+  
+    this.setData({
+      roleStats: {
+        狼人: wolf,
+        村民: villager,
+        神民: god
+      }
+    });
+  },
+  
 
   onSelectPlayer(e) {
     const index = e.currentTarget.dataset.index;
@@ -98,7 +127,9 @@ Page({
       }
     }
 
-    this.setData({ players });
+    this.setData({ players }, () => {
+      this.updateRoleStats();
+    });
   },
 
   handleFlowAction() {
@@ -163,7 +194,9 @@ Page({
       } else {
         this.addLog('没有玩家在夜晚被淘汰');
       }
-      this.setData({ players });
+      this.setData({ players }, () => {
+        this.updateRoleStats();
+      });
     }
 
     if (!next) {
@@ -184,6 +217,7 @@ Page({
     }
     this.setData({ flowButtonText: text });
     this.addLog(`进入环节：第${this.data.dayCount}天 ${next.text}`);
+    this.updateRoleStats();
   },
 
   skipCure() {
@@ -212,9 +246,11 @@ Page({
       subPhase: '',
       flowButtonText: '开始游戏',
       dayCount: 1,
-      logAnchor: ''
+      logAnchor: '',
+      roleStats: { 狼人: 0, 村民: 0, 神民: 0 }
     });
     this.addLog('游戏开始');
+    this.updateRoleStats();
   },
 
   enterNight() {

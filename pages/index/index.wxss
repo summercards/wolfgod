@@ -241,3 +241,21 @@ button:active {
 }
 
 /* === End Retro Theme Overrides === */
+.role-stats {
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  font-size: 16px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.role-stats {
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  font-size: 16px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
