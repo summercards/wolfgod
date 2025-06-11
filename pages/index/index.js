@@ -123,6 +123,28 @@ Page({
     const current = this.data.phase === 'none' ? 'none' : this.data.subPhase;
     const next = nextMap[current];
 
+    if (current === 'day_result') {
+      const players = [...this.data.players];
+      let eliminated = [];
+      players.forEach(p => {
+        if (p.killedTonight && !p.guarded && !p.cured && p.alive) {
+          p.alive = false;
+          eliminated.push(p.number);
+        }
+        // 清除夜晚标志
+        p.killedTonight = false;
+        p.guarded = false;
+        p.cured = false;
+      });
+      if (eliminated.length > 0) {
+        this.addLog(`玩家 ${eliminated.join('、')} 在夜晚被淘汰`);
+      } else {
+        this.addLog('没有玩家在夜晚被淘汰');
+      }
+      this.setData({ players });
+    }
+
+
     if (!next) {
       this.addLog(`流程错误：无法推进，未知阶段 ${current}`);
       return;

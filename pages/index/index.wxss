@@ -186,7 +186,7 @@ button:active {
 .player.werewolf      { background: #9B59B6; color: #F0E9D2; }
 .player.seer          { background: #2980B9; color: #F0E9D2; }
 .player.witch, .witch {
-  background: #f33886;
+  background: #8E44AD;
   color: #F0E9D2;
 }
 .player.bodyguard, .player.guard, .guard, .bodyguard {
@@ -226,6 +226,18 @@ button:active {
 .skip-cure button {
   width: 70%;
   margin: 0 auto;
+}
+
+/* ===== 事件标记：被杀 & 被守护 ===== */
+.player.killed {
+  border: 8rpx solid #FF4D4F;   /* 更粗的血红边框 */
+}
+
+.player.guardian-mark,
+.player.guarded,
+.guarded {              /* 统一不同的 class 名 */
+  border: 8rpx solid #269BFF !important; /* 鲜明天空蓝，带 !important 确保覆盖 */
+  border-radius: 16rpx;  /* 保持票券圆角一致 */
 }
 
 /* === End Retro Theme Overrides === */
