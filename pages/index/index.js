@@ -15,6 +15,7 @@ Page({
     phase: 'none',
     subPhase: '',
     flowButtonText: '开始游戏',
+    dayCount: 1,
     logAnchor: ''
   },
 
@@ -121,7 +122,29 @@ Page({
     };
 
     const current = this.data.phase === 'none' ? 'none' : this.data.subPhase;
-    const next = nextMap[current];
+
+    let next;
+    if (current === 'day_result') {
+      if (this.data.dayCount === 1) {
+        next = nextMap['day_result'];
+      } else {
+        next = nextMap['speak'];
+      }
+    } else if (current === 'police') {
+      if (this.data.dayCount === 1) {
+        next = nextMap['police'];
+      } else {
+        next = nextMap['speak'];
+      }
+    } else if (current === 'police_confirm') {
+      if (this.data.dayCount === 1) {
+        next = nextMap['police_confirm'];
+      } else {
+        next = nextMap['speak'];
+      }
+    } else {
+      next = nextMap[current];
+    }
 
     if (current === 'day_result') {
       const players = [...this.data.players];
@@ -131,7 +154,6 @@ Page({
           p.alive = false;
           eliminated.push(p.number);
         }
-        // 清除夜晚标志
         p.killedTonight = false;
         p.guarded = false;
         p.cured = false;
@@ -144,17 +166,24 @@ Page({
       this.setData({ players });
     }
 
-
     if (!next) {
       this.addLog(`流程错误：无法推进，未知阶段 ${current}`);
       return;
     }
 
+    if (current === 'vote') {
+      this.setData({ dayCount: this.data.dayCount + 1 });
+    }
+
     if (next.phase) this.setData({ phase: next.phase });
     if (next.subPhase !== undefined) this.setData({ subPhase: next.subPhase });
 
-    this.setData({ flowButtonText: next.text });
-    this.addLog(`进入环节：${next.text}`);
+    let text = next.text;
+    if (['day', 'night'].includes(next.phase)) {
+      text = `第${this.data.dayCount}天：` + text;
+    }
+    this.setData({ flowButtonText: text });
+    this.addLog(`进入环节：第${this.data.dayCount}天 ${next.text}`);
   },
 
   skipCure() {
@@ -182,18 +211,27 @@ Page({
       phase: 'none',
       subPhase: '',
       flowButtonText: '开始游戏',
+      dayCount: 1,
       logAnchor: ''
     });
     this.addLog('游戏开始');
   },
 
   enterNight() {
-    this.setData({ phase: 'night', subPhase: 'wolf_mark', flowButtonText: '狼人请睁眼' });
+    this.setData({
+      phase: 'night',
+      subPhase: 'wolf_mark',
+      flowButtonText: '狼人请睁眼'
+    });
     this.addLog('进入夜晚环节');
   },
 
   enterDay() {
-    this.setData({ phase: 'day', subPhase: 'day_result', flowButtonText: '天亮了，开始结算' });
+    this.setData({
+      phase: 'day',
+      subPhase: 'day_result',
+      flowButtonText: `第${this.data.dayCount + 1}天开始结算`
+    });
     this.addLog('进入白天环节');
   }
 });
